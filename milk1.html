@@ -177,7 +177,7 @@
 <div id="render-surface"></div>
 
 <script>
-    const vendorNames = ["Zulfaqar", "Shezad", "Ahmad", "Rehmat", "Ashraf", "Hamza", "Alyas", "Yaqoob", "A Imran", "Iftkhar", "Sahib Khan"];
+    const vendorNames = ["Zulfaqar", "Shezad", "Ahmad", "Rehmat", "Ashraf", "Hamza", "Alyas", "Yaquob", "A Imran", "Iftkhar", "Nazir","imran","Bashir","Khadim","Akbar","M Hafeez","issa","tariq"];
 
     const tbody = document.getElementById('table-body');
     for (let i = 0; i < 30; i++) {
@@ -316,6 +316,47 @@
         link.href = canvas.toDataURL("image/jpeg", 0.9);
         link.click();
     }
+    // Function to handle Excel-style multi-cell pasting
+document.addEventListener('paste', function (e) {
+    // Only trigger if we are inside an input field in the table
+    if (e.target.tagName === 'INPUT') {
+        const input = e.target;
+        const cell = input.parentElement;
+        const row = cell.parentElement;
+        const columnIndex = Array.from(row.children).indexOf(cell);
+        
+        // Get data from clipboard
+        const clipboardData = e.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('Text');
+
+        // Split data into lines (rows)
+        const lines = pastedData.split(/\r\n|\n|\r/);
+
+        if (lines.length > 1) {
+            e.preventDefault(); // Stop the default single-cell paste
+
+            let currentRow = row;
+            lines.forEach((line) => {
+                if (currentRow) {
+                    // Find the input in the same column for the current row
+                    const targetInput = currentRow.children[columnIndex].querySelector('input');
+                    if (targetInput) {
+                        targetInput.value = line.trim();
+                        
+                        // Trigger the calculation function if it exists
+                        // For milk1.html it calls calcRow, for milk2.html it calls calc
+                        if (typeof calc === "function") calc(targetInput);
+                        else if (typeof calculateRow === "function") calculateRow(targetInput);
+                    }
+                    currentRow = currentRow.nextElementSibling;
+                }
+            });
+            
+            // Recalculate totals after pasting
+            if (typeof updateGrandTotals === "function") updateGrandTotals();
+        }
+    }
+});
 </script>
 
 </body>
