@@ -20,7 +20,7 @@
             align-items: center;
         }
 
-        /* Home Button and Vendor Selector */
+        /* Nav and Vendor Selector */
         #nav-header {
             width: 100%;
             background: white;
@@ -59,10 +59,10 @@
             font-size: 14px;
         }
 
-        /* Main Entry Table */
+        /* Entry Container */
         #entry-container {
             width: 100%;
-            max-width: 700px;
+            max-width: 800px;
             background: white;
             padding: 10px;
             margin-top: 10px;
@@ -83,7 +83,7 @@
         th {
             background: var(--primary-blue);
             color: white;
-            font-size: 11px;
+            font-size: 10px;
             padding: 8px 2px;
             text-align: left;
         }
@@ -97,7 +97,7 @@
             width: 100%;
             border: 1px solid #eee;
             padding: 6px 2px;
-            font-size: 13px;
+            font-size: 12px;
             border-radius: 4px;
         }
 
@@ -110,7 +110,7 @@
         .footer-row {
             background: #f8f9fa;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .action-area {
@@ -131,12 +131,13 @@
             cursor: pointer;
         }
 
+        /* Rendering surface for image download */
         #render-surface {
             position: absolute;
             left: -9999px;
             top: 0;
             background: white;
-            width: 700px;
+            width: 800px;
             padding: 20px;
         }
     </style>
@@ -157,12 +158,13 @@
     <table id="main-table">
         <thead>
             <tr>
-                <th width="15%">Date</th>
-                <th width="20%">Name</th>
-                <th width="10%">Ltr</th>
-                <th width="10%">Rate</th>
-                <th width="15%">Amount</th>
-                <th width="15%">Paid</th>
+                <th width="12%">Date</th>
+                <th width="18%">Name</th>
+                <th width="8%">Ltr</th>
+                <th width="8%">Rate</th>
+                <th width="12%">Amount</th>
+                <th width="12%">Paid</th>
+                <th width="15%">Notes</th>
                 <th width="15%">Balance</th>
             </tr>
         </thead>
@@ -174,6 +176,7 @@
                 <td>-</td>
                 <td id="grand-amount">0</td>
                 <td id="grand-paid">0</td>
+                <td>-</td>
                 <td id="grand-balance">0</td>
             </tr>
         </tfoot>
@@ -187,9 +190,8 @@
 <div id="render-surface"></div>
 
 <script>
-    const vendorNames = ["Zulfaqar", "Shezad", "Ahmad", "Rehmat", "Ashraf", "Hamza", "Alyas", "Yaqoob", "A Imran", "Iftkhar", "Sahib Khan"];
+    const vendorNames = ["Zulfaqar", "Shezad", "Ahmad", "Rehmat", "Ashraf", "Hamza", "Alyas", "Yaquob", "A Imran", "Iftkhar", "Nazir","imran","Bashir","Khadim","Akbar","M Hafeez","issa","tariq"];
 
-    // Initialize rows with today's date
     const today = new Date().toISOString().split('T')[0];
     const tbody = document.getElementById('table-body');
     
@@ -202,6 +204,7 @@
             <td><input type="number" class="in-rate" oninput="calc(this)"></td>
             <td class="row-amount">0</td>
             <td><input type="number" class="in-paid" oninput="calc(this)"></td>
+            <td><input type="text" class="in-note"></td>
             <td class="row-balance">0</td>
         `;
         tbody.appendChild(tr);
@@ -234,8 +237,8 @@
         const amount = ltr * rate;
         const balance = amount - paid;
         
-        row.querySelector('.row-amount').innerText = amount.toFixed(0);
-        row.querySelector('.row-balance').innerText = balance.toFixed(0);
+        row.querySelector('.row-amount').innerText = Math.round(amount);
+        row.querySelector('.row-balance').innerText = Math.round(balance);
         
         updateGrandTotals();
     }
@@ -251,9 +254,9 @@
         });
         
         document.getElementById('grand-ltr').innerText = tLtr.toFixed(1);
-        document.getElementById('grand-amount').innerText = tAmount.toLocaleString();
-        document.getElementById('grand-paid').innerText = tPaid.toLocaleString();
-        document.getElementById('grand-balance').innerText = tBalance.toLocaleString();
+        document.getElementById('grand-amount').innerText = Math.round(tAmount).toLocaleString();
+        document.getElementById('grand-paid').innerText = Math.round(tPaid).toLocaleString();
+        document.getElementById('grand-balance').innerText = Math.round(tBalance).toLocaleString();
     }
 
     async function generateCleanImage() {
@@ -272,7 +275,7 @@
         surface.style.backgroundImage = "url('mylogo.jpeg')";
         surface.style.backgroundRepeat = "no-repeat";
         surface.style.backgroundPosition = "center";
-        surface.style.backgroundSize = "250px";
+        surface.style.backgroundSize = "300px";
 
         cleanTable.innerHTML = `<thead><tr style="background:#1a365d;color:white;">
             <th style="padding:8px;border:1px solid #ccc">Date</th>
@@ -281,6 +284,7 @@
             <th style="padding:8px;border:1px solid #ccc">Rate</th>
             <th style="padding:8px;border:1px solid #ccc">Amount</th>
             <th style="padding:8px;border:1px solid #ccc">Paid</th>
+            <th style="padding:8px;border:1px solid #ccc">Notes</th>
             <th style="padding:8px;border:1px solid #ccc">Balance</th>
         </tr></thead>`;
 
@@ -294,18 +298,20 @@
             const rate = row.querySelector('.in-rate').value;
             const amount = row.querySelector('.row-amount').innerText;
             const paid = row.querySelector('.in-paid').value || "0";
+            const note = row.querySelector('.in-note').value;
             const balance = row.querySelector('.row-balance').innerText;
 
-            if (name || ltr > 0) {
+            if (name || ltr > 0 || parseFloat(paid) > 0) {
                 hasData = true;
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="padding:8px;border:1px solid #ccc;font-size:11px">${date}</td>
+                    <td style="padding:8px;border:1px solid #ccc;font-size:10px">${date}</td>
                     <td style="padding:8px;border:1px solid #ccc">${name}</td>
                     <td style="padding:8px;border:1px solid #ccc">${ltr}</td>
                     <td style="padding:8px;border:1px solid #ccc">${rate}</td>
                     <td style="padding:8px;border:1px solid #ccc">${amount}</td>
                     <td style="padding:8px;border:1px solid #ccc;color:#27ae60">${paid}</td>
+                    <td style="padding:8px;border:1px solid #ccc;font-size:10px">${note}</td>
                     <td style="padding:8px;border:1px solid #ccc;font-weight:bold;color:${parseFloat(balance) > 0 ? '#c0392b' : '#2980b9'}">${balance}</td>
                 `;
                 cleanBody.appendChild(tr);
@@ -322,6 +328,7 @@
             <td style="padding:8px;border:1px solid #ccc">-</td>
             <td style="padding:8px;border:1px solid #ccc">${document.getElementById('grand-amount').innerText}</td>
             <td style="padding:8px;border:1px solid #ccc;color:#27ae60">${document.getElementById('grand-paid').innerText}</td>
+            <td style="padding:8px;border:1px solid #ccc">-</td>
             <td style="padding:8px;border:1px solid #ccc">${document.getElementById('grand-balance').innerText}</td>
         </tr>`;
         cleanTable.appendChild(footer);
@@ -333,6 +340,47 @@
         link.href = canvas.toDataURL("image/jpeg", 0.9);
         link.click();
     }
+    // Function to handle Excel-style multi-cell pasting
+document.addEventListener('paste', function (e) {
+    // Only trigger if we are inside an input field in the table
+    if (e.target.tagName === 'INPUT') {
+        const input = e.target;
+        const cell = input.parentElement;
+        const row = cell.parentElement;
+        const columnIndex = Array.from(row.children).indexOf(cell);
+        
+        // Get data from clipboard
+        const clipboardData = e.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('Text');
+
+        // Split data into lines (rows)
+        const lines = pastedData.split(/\r\n|\n|\r/);
+
+        if (lines.length > 1) {
+            e.preventDefault(); // Stop the default single-cell paste
+
+            let currentRow = row;
+            lines.forEach((line) => {
+                if (currentRow) {
+                    // Find the input in the same column for the current row
+                    const targetInput = currentRow.children[columnIndex].querySelector('input');
+                    if (targetInput) {
+                        targetInput.value = line.trim();
+                        
+                        // Trigger the calculation function if it exists
+                        // For milk1.html it calls calcRow, for milk2.html it calls calc
+                        if (typeof calc === "function") calc(targetInput);
+                        else if (typeof calculateRow === "function") calculateRow(targetInput);
+                    }
+                    currentRow = currentRow.nextElementSibling;
+                }
+            });
+            
+            // Recalculate totals after pasting
+            if (typeof updateGrandTotals === "function") updateGrandTotals();
+        }
+    }
+});
 </script>
 </body>
 </html>
