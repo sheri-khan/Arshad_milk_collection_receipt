@@ -3,319 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arshad Milk Point - Mobile</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <title>Arshad Milk Point - Management Portal</title>
     <style>
         :root {
-            --primary-blue: #1a365d;
-            --light-blue: #f0f4f8;
+            --primary: #1a365d;
+            --accent: #27ae60;
+            --bg: #f0f2f5;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            background-color: #f0f2f5;
+            padding: 0;
+            background-color: var(--bg);
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
         }
 
-        /* Vendor Selection Bar */
-        #vendor-bar {
-            width: 100%;
+        .container {
+            width: 90%;
+            max-width: 500px;
             background: white;
-            padding: 10px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 2px solid var(--primary-blue);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 40px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
-        .scroll-wrapper {
-            display: flex;
-            overflow-x: auto;
-            gap: 8px;
-            padding: 5px 0;
+        .logo-circle {
+            width: 120px;
+            height: 120px;
+            background-color: var(--light-blue);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background-image: url('mylogo.jpeg'); /* Uses your existing logo */
+            background-size: cover;
+            background-position: center;
+            border: 4px solid var(--primary);
         }
 
-        .name-btn {
-            white-space: nowrap;
-            padding: 10px 18px;
-            background: var(--light-blue);
-            border: 1px solid var(--primary-blue);
-            border-radius: 25px;
-            color: var(--primary-blue);
-            font-weight: bold;
+        h1 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+
+        p {
+            color: #64748b;
+            margin-bottom: 30px;
             font-size: 14px;
         }
 
-        /* Main Entry Table */
-        #entry-container {
-            width: 100%;
-            max-width: 600px; /* Increased slightly for more columns */
-            background: white;
-            padding: 10px;
-            margin-top: 10px;
-            box-sizing: border-box;
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        .header-text {
-            text-align: center;
-            color: var(--primary-blue);
-            margin-bottom: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: var(--primary-blue);
+        .btn {
+            display: block;
+            padding: 18px;
+            text-decoration: none;
             color: white;
-            font-size: 11px;
-            padding: 8px 2px;
-            text-align: left;
-        }
-
-        td {
-            border-bottom: 1px solid #ddd;
-            padding: 4px 2px;
-        }
-
-        input {
-            width: 100%;
-            border: 1px solid #eee;
-            padding: 6px 2px;
-            font-size: 13px;
-            border-radius: 4px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            background: #fffef0;
-        }
-
-        .footer-row {
-            background: #f8f9fa;
             font-weight: bold;
+            border-radius: 12px;
+            font-size: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-milk1 {
+            background-color: var(--primary);
+        }
+
+        .btn-milk2 {
+            background-color: var(--accent);
+        }
+
+        .footer-credit {
+            margin-top: 40px;
             font-size: 12px;
-        }
-
-        .action-area {
-            padding: 20px;
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .btn-download {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 15px;
-            width: 100%;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        #render-surface {
-            position: absolute;
-            left: -9999px;
-            top: 0;
-            background: white;
-            width: 600px;
-            padding: 20px;
+            color: #94a3b8;
         }
     </style>
 </head>
 <body>
 
-<div id="vendor-bar">
-    <div class="scroll-wrapper" id="name-list"></div>
-</div>
+    <div class="container">
+        <div class="logo-circle"></div>
+        <h1>Arshad Milk Point</h1>
+        <p>Fresh & Pure Milk Collection Management</p>
 
-<div id="entry-container">
-    <div class="header-text">
-        <h2 style="margin:0">ARSHAD MILK POINT</h2>
-        <p style="margin:0; font-size: 11px;">FRESH & PURE MILK COLLECTION</p>
+        <div class="nav-buttons">
+            <a href="milk1.html" class="btn btn-milk1">
+                🥛 Milk Collection (v1)
+            </a>
+
+            <a href="milk2.html" class="btn btn-milk2">
+                📊 New Data Entry (v2)
+            </a>
+        </div>
+
+        <div class="footer-credit">
+            © 2026 Arshad Milk Point Portal
+        </div>
     </div>
-
-    <table id="main-table">
-        <thead>
-            <tr>
-                <th width="25%">Name</th>
-                <th width="12%">Ltr</th>
-                <th width="12%">Rate</th>
-                <th width="15%">Total</th>
-                <th width="15%">Payment</th>
-                <th width="21%">Note</th>
-            </tr>
-        </thead>
-        <tbody id="table-body"></tbody>
-        <tfoot>
-            <tr class="footer-row">
-                <td>TOTAL</td>
-                <td id="grand-ltr">0</td>
-                <td>-</td>
-                <td id="grand-total">0</td>
-                <td id="grand-payment">0</td>
-                <td>-</td>
-            </tr>
-        </tfoot>
-    </table>
-</div>
-
-<div class="action-area">
-    <button class="btn-download" onclick="generateCleanImage()">Download JPEG Report</button>
-</div>
-
-<div id="render-surface"></div>
-
-<script>
-    const vendorNames = ["Zulfaqar", "Shezad", "Ahmad", "Rehmat", "Ashraf", "Hamza", "Alyas", "Yaqoob", "A Imran", "Iftkhar", "Sahib Khan"];
-
-    const tbody = document.getElementById('table-body');
-    for (let i = 0; i < 30; i++) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td><input type="text" class="in-name"></td>
-            <td><input type="number" class="in-ltr" oninput="calc(this)"></td>
-            <td><input type="number" class="in-rate" oninput="calc(this)"></td>
-            <td class="row-total">0</td>
-            <td><input type="number" class="in-payment" oninput="updateGrandTotals()"></td>
-            <td><input type="text" class="in-note"></td>
-        `;
-        tbody.appendChild(tr);
-    }
-
-    const nameList = document.getElementById('name-list');
-    vendorNames.forEach(name => {
-        const btn = document.createElement('button');
-        btn.className = 'name-btn';
-        btn.innerText = name;
-        btn.onclick = () => {
-            const inputs = document.querySelectorAll('.in-name');
-            for(let input of inputs) {
-                if(input.value === "") {
-                    input.value = name;
-                    input.closest('tr').querySelector('.in-ltr').focus();
-                    break;
-                }
-            }
-        };
-        nameList.appendChild(btn);
-    });
-
-    function calc(el) {
-        const row = el.closest('tr');
-        const ltr = parseFloat(row.querySelector('.in-ltr').value) || 0;
-        const rate = parseFloat(row.querySelector('.in-rate').value) || 0;
-        const total = ltr * rate;
-        
-        row.querySelector('.row-total').innerText = total.toFixed(0);
-        updateGrandTotals();
-    }
-
-    function updateGrandTotals() {
-        let totalLtr = 0;
-        let totalCash = 0;
-        let totalPayment = 0;
-        
-        document.querySelectorAll('.in-ltr').forEach(el => totalLtr += (parseFloat(el.value) || 0));
-        document.querySelectorAll('.row-total').forEach(el => totalCash += (parseFloat(el.innerText) || 0));
-        document.querySelectorAll('.in-payment').forEach(el => totalPayment += (parseFloat(el.value) || 0));
-        
-        document.getElementById('grand-ltr').innerText = totalLtr.toFixed(1);
-        document.getElementById('grand-total').innerText = totalCash.toLocaleString();
-        document.getElementById('grand-payment').innerText = totalPayment.toLocaleString();
-    }
-
-    async function generateCleanImage() {
-        const renderSurface = document.getElementById('render-surface');
-        renderSurface.innerHTML = ""; 
-
-        const header = document.querySelector('.header-text').cloneNode(true);
-        renderSurface.appendChild(header);
-
-        const cleanTable = document.createElement('table');
-        cleanTable.style.width = "100%";
-        cleanTable.style.borderCollapse = "collapse";
-        cleanTable.style.marginTop = "20px";
-        
-        renderSurface.style.position = "relative";
-        renderSurface.style.backgroundImage = "url('mylogo.jpeg')";
-        renderSurface.style.backgroundRepeat = "no-repeat";
-        renderSurface.style.backgroundPosition = "center";
-        renderSurface.style.backgroundSize = "250px";
-
-        cleanTable.innerHTML = `<thead><tr style="background:#1a365d;color:white;">
-            <th style="padding:8px;border:1px solid #ccc">Name</th>
-            <th style="padding:8px;border:1px solid #ccc">Liters</th>
-            <th style="padding:8px;border:1px solid #ccc">Rate</th>
-            <th style="padding:8px;border:1px solid #ccc">Total</th>
-            <th style="padding:8px;border:1px solid #ccc">Payment</th>
-            <th style="padding:8px;border:1px solid #ccc">Note</th>
-        </tr></thead>`;
-
-        const cleanBody = document.createElement('tbody');
-        let hasData = false;
-
-        document.querySelectorAll('#table-body tr').forEach(row => {
-            const name = row.querySelector('.in-name').value;
-            const ltr = row.querySelector('.in-ltr').value;
-            const rate = row.querySelector('.in-rate').value;
-            const total = row.querySelector('.row-total').innerText;
-            const payment = row.querySelector('.in-payment').value || "0";
-            const note = row.querySelector('.in-note').value;
-
-            if (name || ltr > 0 || payment > 0 || note) {
-                hasData = true;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="padding:8px;border:1px solid #ccc">${name}</td>
-                    <td style="padding:8px;border:1px solid #ccc">${ltr}</td>
-                    <td style="padding:8px;border:1px solid #ccc">${rate}</td>
-                    <td style="padding:8px;border:1px solid #ccc;font-weight:bold">${total}</td>
-                    <td style="padding:8px;border:1px solid #ccc;color:#c0392b;font-weight:bold">${payment}</td>
-                    <td style="padding:8px;border:1px solid #ccc;font-size:11px">${note}</td>
-                `;
-                cleanBody.appendChild(tr);
-            }
-        });
-
-        if(!hasData) { alert("Please enter at least one entry!"); return; }
-
-        cleanTable.appendChild(cleanBody);
-
-        const footer = document.createElement('tfoot');
-        footer.innerHTML = `<tr style="background:#eee; font-weight:bold">
-            <td style="padding:8px;border:1px solid #ccc">GRAND TOTAL</td>
-            <td style="padding:8px;border:1px solid #ccc">${document.getElementById('grand-ltr').innerText}</td>
-            <td style="padding:8px;border:1px solid #ccc">-</td>
-            <td style="padding:8px;border:1px solid #ccc">${document.getElementById('grand-total').innerText}</td>
-            <td style="padding:8px;border:1px solid #ccc;color:#c0392b">${document.getElementById('grand-payment').innerText}</td>
-            <td style="padding:8px;border:1px solid #ccc">-</td>
-        </tr>`;
-        cleanTable.appendChild(footer);
-
-        renderSurface.appendChild(cleanTable);
-
-        const canvas = await html2canvas(renderSurface, {
-            scale: 2,
-            backgroundColor: "#ffffff",
-            logging: false
-        });
-
-        const link = document.createElement('a');
-        link.download = `Milk_Receipt_${new Date().getTime()}.jpg`;
-        link.href = canvas.toDataURL("image/jpeg", 0.9);
-        link.click();
-    }
-</script>
 
 </body>
 </html>
