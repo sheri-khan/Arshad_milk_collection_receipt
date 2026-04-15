@@ -9,6 +9,8 @@
         :root {
             --primary-blue: #1a365d;
             --light-blue: #f0f4f8;
+            --name-color: #2c5282; /* Professional blue for names */
+            --paid-red: #e53e3e;   /* Red for payments */
         }
 
         body {
@@ -101,6 +103,16 @@
             border-radius: 4px;
         }
 
+        /* Styled Input Fields */
+        .in-name {
+            font-weight: bold;
+            color: var(--name-color);
+        }
+        .in-paid {
+            color: var(--paid-red);
+            font-weight: bold;
+        }
+
         input:focus {
             outline: none;
             border-color: var(--primary-blue);
@@ -131,7 +143,6 @@
             cursor: pointer;
         }
 
-        /* Rendering surface for image download */
         #render-surface {
             position: absolute;
             left: -9999px;
@@ -175,7 +186,7 @@
                 <td id="grand-ltr">0</td>
                 <td>-</td>
                 <td id="grand-amount">0</td>
-                <td id="grand-paid">0</td>
+                <td id="grand-paid" style="color: var(--paid-red);">0</td>
                 <td>-</td>
                 <td id="grand-balance">0</td>
             </tr>
@@ -306,11 +317,11 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td style="padding:8px;border:1px solid #ccc;font-size:10px">${date}</td>
-                    <td style="padding:8px;border:1px solid #ccc">${name}</td>
+                    <td style="padding:8px;border:1px solid #ccc;font-weight:bold;color:#2c5282">${name}</td>
                     <td style="padding:8px;border:1px solid #ccc">${ltr}</td>
                     <td style="padding:8px;border:1px solid #ccc">${rate}</td>
                     <td style="padding:8px;border:1px solid #ccc">${amount}</td>
-                    <td style="padding:8px;border:1px solid #ccc;color:#27ae60">${paid}</td>
+                    <td style="padding:8px;border:1px solid #ccc;color:#e53e3e;font-weight:bold">${paid}</td>
                     <td style="padding:8px;border:1px solid #ccc;font-size:10px">${note}</td>
                     <td style="padding:8px;border:1px solid #ccc;font-weight:bold;color:${parseFloat(balance) > 0 ? '#c0392b' : '#2980b9'}">${balance}</td>
                 `;
@@ -327,7 +338,7 @@
             <td style="padding:8px;border:1px solid #ccc">${document.getElementById('grand-ltr').innerText}</td>
             <td style="padding:8px;border:1px solid #ccc">-</td>
             <td style="padding:8px;border:1px solid #ccc">${document.getElementById('grand-amount').innerText}</td>
-            <td style="padding:8px;border:1px solid #ccc;color:#27ae60">${document.getElementById('grand-paid').innerText}</td>
+            <td style="padding:8px;border:1px solid #ccc;color:#e53e3e">${document.getElementById('grand-paid').innerText}</td>
             <td style="padding:8px;border:1px solid #ccc">-</td>
             <td style="padding:8px;border:1px solid #ccc">${document.getElementById('grand-balance').innerText}</td>
         </tr>`;
@@ -340,47 +351,36 @@
         link.href = canvas.toDataURL("image/jpeg", 0.9);
         link.click();
     }
+
     // Function to handle Excel-style multi-cell pasting
-document.addEventListener('paste', function (e) {
-    // Only trigger if we are inside an input field in the table
-    if (e.target.tagName === 'INPUT') {
-        const input = e.target;
-        const cell = input.parentElement;
-        const row = cell.parentElement;
-        const columnIndex = Array.from(row.children).indexOf(cell);
-        
-        // Get data from clipboard
-        const clipboardData = e.clipboardData || window.clipboardData;
-        const pastedData = clipboardData.getData('Text');
-
-        // Split data into lines (rows)
-        const lines = pastedData.split(/\r\n|\n|\r/);
-
-        if (lines.length > 1) {
-            e.preventDefault(); // Stop the default single-cell paste
-
-            let currentRow = row;
-            lines.forEach((line) => {
-                if (currentRow) {
-                    // Find the input in the same column for the current row
-                    const targetInput = currentRow.children[columnIndex].querySelector('input');
-                    if (targetInput) {
-                        targetInput.value = line.trim();
-                        
-                        // Trigger the calculation function if it exists
-                        // For milk1.html it calls calcRow, for milk2.html it calls calc
-                        if (typeof calc === "function") calc(targetInput);
-                        else if (typeof calculateRow === "function") calculateRow(targetInput);
-                    }
-                    currentRow = currentRow.nextElementSibling;
-                }
-            });
+    document.addEventListener('paste', function (e) {
+        if (e.target.tagName === 'INPUT') {
+            const input = e.target;
+            const cell = input.parentElement;
+            const row = cell.parentElement;
+            const columnIndex = Array.from(row.children).indexOf(cell);
             
-            // Recalculate totals after pasting
-            if (typeof updateGrandTotals === "function") updateGrandTotals();
+            const clipboardData = e.clipboardData || window.clipboardData;
+            const pastedData = clipboardData.getData('Text');
+            const lines = pastedData.split(/\r\n|\n|\r/);
+
+            if (lines.length > 1) {
+                e.preventDefault();
+                let currentRow = row;
+                lines.forEach((line) => {
+                    if (currentRow) {
+                        const targetInput = currentRow.children[columnIndex].querySelector('input');
+                        if (targetInput) {
+                            targetInput.value = line.trim();
+                            calc(targetInput);
+                        }
+                        currentRow = currentRow.nextElementSibling;
+                    }
+                });
+                updateGrandTotals();
+            }
         }
-    }
-});
+    });
 </script>
 </body>
 </html>
